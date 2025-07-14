@@ -9,7 +9,7 @@ public:
             k--;
             int num=pq.top();
             pq.pop();
-            num=((int)(floor(sqrt(num))));
+            num=((int)(floor(pow(num,0.5))));
             pq.push(num);
         }
         long long ans=0;
