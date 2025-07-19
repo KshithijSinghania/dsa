@@ -11,15 +11,12 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if (root == NULL || root == p || root == q)
-            return root;
-
-        TreeNode* leftLCA = lowestCommonAncestor(root->left, p, q);
-        TreeNode* rightLCA = lowestCommonAncestor(root->right, p, q);
-
-        if (leftLCA && rightLCA)
-            return root;  // p and q found in different subtrees
-
-        return leftLCA ? leftLCA : rightLCA;
+        if(root==NULL || root==p || root==q)
+        return root;
+        TreeNode* fromleft=lowestCommonAncestor(root->left,p,q);
+        TreeNode* fromright=lowestCommonAncestor(root->right,p,q);
+        if(fromleft && fromright)
+        return root;
+        return fromleft?fromleft:fromright;
     }
 };
