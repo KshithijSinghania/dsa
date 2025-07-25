@@ -6,7 +6,7 @@ public:
        vector <int> ans(m);
        for(int i=0;i<m;i++){
         for(int j=0;j<n;j++){
-            int wid=to_string(grid[j][i]).size();
+            int wid=to_string(grid[j][i]).length();
             ans[i]=max(ans[i],wid);
         }
        }
