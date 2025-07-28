@@ -1,45 +1,76 @@
-class Solution {
-public:
-    void dfs(int i,vector <vector <int>> &adj,vector <int> &vis){
-        vis[i]=1;
-        for(auto it:adj[i]){
-            if(!vis[it]){
-                dfs(it,adj,vis);
-            }
+class Disjoint{
+    public:
+    vector <int> parent;
+    vector <int> rank;
+    Disjoint(int n){
+        parent.resize(n);
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+        }
+        rank.resize(n,1);
+    }
+    int findUPar(int i){
+        if(parent[i]==i)
+        return i;
+        return parent[i]=findUPar(parent[i]);
+    }
+
+    void UnionByRank(int u,int v){
+        int uu=findUPar(u);
+        int uv=findUPar(v);
+        if(uu==uv)
+        return;
+        int ru=rank[u];
+        int rv=rank[v];
+        if(ru<rv){
+            parent[uu]=uv;
+        }
+        else if(rv<ru){
+            parent[uv]=uu;
+        }
+        else{
+            parent[uu]=uv;
+            rank[uv]++;
         }
     }
+};
+class Solution {
+public:
     int findCircleNum(vector<vector<int>>& isConnected) {
         int n=isConnected.size();
-        vector <vector <int>> adj(n);
+        // vector <vector <int>> adj(n);
+        // for(int i=0;i<n;i++){
+        //     for(int j=0;j<n;j++){
+        //         if(i!=j){
+        //             if(isConnected[i][j]){
+        //                 adj[i].push_back(j);
+        //             }
+        //         }
+        //     }
+        // }
+        vector <pair <int,int>> edges;
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
                 if(i!=j){
                     if(isConnected[i][j]){
-                        adj[i].push_back(j);
+                        edges.push_back({i,j});
                     }
                 }
             }
         }
+        Disjoint ds(n);
+        for(auto it:edges){
+            int u=it.first;
+            int v=it.second;
+            ds.UnionByRank(u,v);
+        }
+
         int ans=0;
-        vector <int> vis(n,0);
         for(int i=0;i<n;i++){
-            if(!vis[i]){
-                ans++;
-                queue <int> q;
-                q.push(i);
-                vis[i]=1;
-                while(q.size()){
-                    int node=q.front();
-                    q.pop();
-                    for(auto it:adj[node]){
-                        if(!vis[it]){
-                            vis[it]=1;
-                            q.push(it);
-                        }
-                    }
-                }
-            }
+            if(ds.parent[i]==i)
+            ans++;
         }
+        
         return ans;
     }
 };
